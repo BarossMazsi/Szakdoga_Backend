@@ -25,7 +25,7 @@ function kapcsolat(){
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-
+//-Mazsi végpontjai------------------------------------------------------------------------------------------------------
 app.get('/video', (req, res) => {
     kapcsolat()
     connection.query('SELECT * from video', (err, rows, fields) => {
@@ -76,7 +76,34 @@ app.get('/video', (req, res) => {
     }
 })
   
+//István végpontjai-------------------------------------------------------------------------------------
+app.get('/Sportoloklista', (req, res) => {
+    kapcsolat();
+    connection.query('SELECT * FROM sportolok', (err, rows) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Hiba");
+        } else {
+            console.log(rows);
+            res.status(200).send(rows);
+        }
+    })
+    connection.end()
+});
 
+app.get('/Tanacsoklista', (req, res) => {
+    kapcsolat();
+    connection.query('SELECT * FROM tanacsok', (err, rows) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Hiba");
+        } else {
+            console.log(rows);
+            res.status(200).send(rows);
+        }
+    })
+    connection.end()
+});
 
 
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Nov 28. 10:45
+-- Létrehozás ideje: 2024. Nov 28. 10:58
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -53,6 +53,61 @@ INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `sportolok`
+--
+
+CREATE TABLE `sportolok` (
+  `ID` int(11) NOT NULL,
+  `Nev` varchar(100) CHARACTER SET utf8 COLLATE utf8_hungarian_ci NOT NULL,
+  `Kor` int(11) NOT NULL,
+  `Nem` enum('Férfi','Nő') CHARACTER SET utf8 COLLATE utf8_hungarian_ci NOT NULL,
+  `Pozicio` varchar(50) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `Suly` decimal(5,2) DEFAULT NULL,
+  `Magassag` decimal(5,2) DEFAULT NULL,
+  `Csapat` varchar(100) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `Állampolgárság` varchar(111) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `sportolok`
+--
+
+INSERT INTO `sportolok` (`ID`, `Nev`, `Kor`, `Nem`, `Pozicio`, `Suly`, `Magassag`, `Csapat`, `Állampolgárság`) VALUES
+(1, 'Kovács Péter', 25, 'Férfi', 'Csatár', 75.50, 180.00, 'Puskás Akadémia', 'magyar'),
+(2, 'Nagy Anna', 22, 'Nő', 'Kapus', 65.30, 175.00, 'Ferencváros', 'magyar'),
+(3, 'Horváth Dániel', 28, 'Férfi', 'Védő', 82.00, 185.00, 'Újpest FC', 'magyar'),
+(4, 'Szoboszlai Dominik', 24, 'Férfi', 'középpályás', 74.00, 187.00, 'Liverpool Football Club', 'magyar'),
+(5, 'Cristiano Ronaldo', 39, 'Férfi', 'csatár', 85.00, 187.00, 'En-Naszr FC', 'portugál'),
+(6, 'Lionel Messi', 37, 'Férfi', 'szélső és támadó középpályás', 72.00, 170.00, 'Inter Miami CF', 'argentin, spanyol'),
+(7, 'Mohamed Szaláh Gáli', 32, 'Férfi', 'szélső támadó', 72.00, 175.00, 'Liverpool Football Club', 'egyiptomi');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `tanacsok`
+--
+
+CREATE TABLE `tanacsok` (
+  `id` int(11) NOT NULL,
+  `tanacs_cim` varchar(544) NOT NULL,
+  `tanacs_szoveg` varchar(544) NOT NULL,
+  `datum` date NOT NULL,
+  `sportoloid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `tanacsok`
+--
+
+INSERT INTO `tanacsok` (`id`, `tanacs_cim`, `tanacs_szoveg`, `datum`, `sportoloid`) VALUES
+(1, 'Szoboszlai Dominik Étrendje', 'A Liverpool csapatkonyháján a játékosok rendelkezésére áll egy gyümölcscentrifuga, hogy frissen facsart leveket igyanak, ezenkívül mindig van az étkezőben kitéve dióféle, granola és egy salátás részleg is. Szoboszlaiék nem ehetnek előregyártott készételeket és mártásokat sem. A salátaönteteket, szószokat is a Liverpool konyháján készítik el nekik. A desszertekhez pedig mandulatejet, kiváló minőségű kakaót és melaszt használnak.', '2023-07-04', 4),
+(2, 'Cristiano Ronaldo étrendje', 'Cristiano Ronaldo, a világ egyik legjobb focistája, az étrendjét gondosan megtervezi, hogy fenntartsa kiemelkedő formáját. A következő étkezési szokások segítik a regenerációt és a teljesítmény maximalizálását:\r\nReggeli: Zabkása, tojásfehérje, avokádó és friss gyümölcsök.\r\nTízórai: Proteines ital vagy túró.\r\nEbéd: Grillezett csirke, barna rizs, zöldségek, például brokkoli vagy spenót.\r\nUzsonna: Mandula vagy egy kis adag joghurt.\r\nVacsora: Hal, például lazac, édesburgonya és saláta.', '2024-11-26', 5),
+(3, 'Lionel Messi étrendje', 'Lionel Messi, aki szintén a világ legnagyobb labdarúgóinak egyike, szintén nagy hangsúlyt fektet a táplálkozásra. Messi étrendje gazdag tápanyagokban, amely segíti őt a gyors regenerációban és az energiaszint fenntartásában.\r\nReggeli: Pita kenyér, tojás, sajt, zöldségek.\r\nTízórai: Friss gyümölcs vagy smoothie.\r\nEbéd: Grillezett csirke, quinoa vagy barna rizs, saláta.\r\nUzsonna: Diófélék vagy túró.\r\nVacsora: Fehér hús, például csirke vagy pulyka, zöldségekkel.', '2024-11-26', 6),
+(4, 'Mohamed Salah étrendje', 'Mohamed Salah, a Liverpool sztárja, szintén különös figyelmet fordít az étrendjére, hogy támogassa intenzív edzésmunkáját. Az ő étrendje is a kiegyensúlyozott tápanyagbevitelre épít.\r\nReggeli: Zabkása, friss bogyós gyümölcsök és joghurt.\r\nTízórai: Fehérje shake vagy protein szelet.\r\nEbéd: Grillezett hal, például tonhal, quinoa és zöldség.\r\nUzsonna: Szeletelt avokádó és teljes kiőrlésű kenyér.\r\nVacsora: Csirke, édesburgonya és brokkoli.', '2024-11-26', 7);
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `video`
 --
 
@@ -83,6 +138,19 @@ ALTER TABLE `felhasznalok`
   ADD PRIMARY KEY (`fel_id`);
 
 --
+-- A tábla indexei `sportolok`
+--
+ALTER TABLE `sportolok`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- A tábla indexei `tanacsok`
+--
+ALTER TABLE `tanacsok`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sportoloid` (`sportoloid`);
+
+--
 -- A tábla indexei `video`
 --
 ALTER TABLE `video`
@@ -100,6 +168,18 @@ ALTER TABLE `felhasznalok`
   MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT a táblához `sportolok`
+--
+ALTER TABLE `sportolok`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT a táblához `tanacsok`
+--
+ALTER TABLE `tanacsok`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT a táblához `video`
 --
 ALTER TABLE `video`
@@ -108,6 +188,12 @@ ALTER TABLE `video`
 --
 -- Megkötések a kiírt táblákhoz
 --
+
+--
+-- Megkötések a táblához `tanacsok`
+--
+ALTER TABLE `tanacsok`
+  ADD CONSTRAINT `tanacsok_ibfk_1` FOREIGN KEY (`sportoloid`) REFERENCES `sportolok` (`ID`);
 
 --
 -- Megkötések a táblához `video`
