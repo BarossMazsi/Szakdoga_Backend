@@ -93,7 +93,7 @@ app.get('/Sportoloklista', (req, res) => {
 
 app.get('/Tanacsoklista', (req, res) => {
     kapcsolat();
-    connection.query('SELECT * FROM tanacsok', (err, rows) => {
+    connection.query('SELECT * FROM tanacsok inner join sportolok on tanacsok.sportoloid=sportolok.ID', (err, rows) => {
         if (err) {
             console.log(err);
             res.status(500).send("Hiba");
