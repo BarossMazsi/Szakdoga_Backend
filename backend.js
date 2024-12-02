@@ -93,7 +93,19 @@ app.get('/Sportoloklista', (req, res) => {
 
 app.get('/Tanacsoklista', (req, res) => {
     kapcsolat();
-    connection.query('SELECT * FROM tanacsok inner join sportolok on tanacsok.sportoloid=sportolok.ID', (err, rows) => {
+    const query = `
+        SELECT 
+            tanacsok.*,
+            sportolok.*,
+            DATE_FORMAT(tanacsok.datum, '%Y-%m-%d') AS local_datum
+        FROM 
+            tanacsok 
+        INNER JOIN 
+            sportolok 
+        ON 
+            tanacsok.sportoloid = sportolok.ID
+    `;
+    connection.query(query, (err, rows) => {
         if (err) {
             console.log(err);
             res.status(500).send("Hiba");
@@ -101,9 +113,10 @@ app.get('/Tanacsoklista', (req, res) => {
             console.log(rows);
             res.status(200).send(rows);
         }
-    })
-    connection.end()
+    });
+    connection.end();
 });
+
 
 
 
