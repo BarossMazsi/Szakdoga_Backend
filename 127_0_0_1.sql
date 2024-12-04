@@ -64,22 +64,24 @@ CREATE TABLE `sportolok` (
   `Pozicio` varchar(50) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
   `Suly` decimal(5,2) DEFAULT NULL,
   `Magassag` decimal(5,2) DEFAULT NULL,
-  `Csapat` varchar(100) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `Állampolgárság` varchar(111) NOT NULL
+  `Elöző csapatai` varchar(100) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `Jelenlegi csapata` varchar(100) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `Állampolgárság` varchar(111) NOT NULL,
+  `Státusza` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `sportolok`
 --
 
-INSERT INTO `sportolok` (`ID`, `Nev`, `Kor`, `Nem`, `Pozicio`, `Suly`, `Magassag`, `Csapat`, `Állampolgárság`) VALUES
-(1, 'Kovács Péter', 25, 'Férfi', 'Csatár', 75.50, 180.00, 'Puskás Akadémia', 'magyar'),
-(2, 'Nagy Anna', 22, 'Nő', 'Kapus', 65.30, 175.00, 'Ferencváros', 'magyar'),
-(3, 'Horváth Dániel', 28, 'Férfi', 'Védő', 82.00, 185.00, 'Újpest FC', 'magyar'),
-(4, 'Szoboszlai Dominik', 24, 'Férfi', 'középpályás', 74.00, 187.00, 'Liverpool Football Club', 'magyar'),
-(5, 'Cristiano Ronaldo', 39, 'Férfi', 'csatár', 85.00, 187.00, 'En-Naszr FC', 'portugál'),
-(6, 'Lionel Messi', 37, 'Férfi', 'szélső és támadó középpályás', 72.00, 170.00, 'Inter Miami CF', 'argentin, spanyol'),
-(7, 'Mohamed Szaláh Gáli', 32, 'Férfi', 'szélső támadó', 72.00, 175.00, 'Liverpool Football Club', 'egyiptomi');
+INSERT INTO `sportolok` (`ID`, `Nev`, `Kor`, `Nem`, `Pozicio`, `Suly`, `Magassag`, `Elöző csapatai`, `Jelenlegi csapata`, `Állampolgárság`, `Státusza`) VALUES
+(1, 'Kovács Péter', 46, 'Férfi', 'Csatár', 97.00, 198.00, 'Újpest FC\r\nVác FC\r\nFC Lahti\r\nFC Haka\r\nTromsø IL\r\nViking FK\r\nStrømsgodset\r\nOdd Grenland\r\nLierse SK', 'Arendal Fotball', 'magyar', 'Jelenleg is aktív'),
+(2, 'Csiszár Henrietta', 30, 'Nő', 'középpályás', 58.00, 164.00, 'Hajdúnánás FK\r\nFerencvárosi TC\r\nBelvárosi NLC\r\nMTK Hungária FC\r\nASA Tîrgu Mureş\r\n1. FC Lübars\r\nBayer', 'Football Club Internazionale Milano', 'magyar', 'Jelenleg is aktív'),
+(3, 'Puskás Ferenc', 79, 'Férfi', 'csatár (balösszekötő)', 72.00, 172.00, 'Kispest AC / Bp. Honvéd', 'Real Madrid', 'magyar, spanyol', 'Elhunyt'),
+(4, 'Szoboszlai Dominik', 24, 'Férfi', 'középpályás', 74.00, 187.00, 'Videoton\r\nFőnix Gold\r\nMTK Budapest\r\nSalzburg\r\nLiefering\r\nRB Leipzig', 'Liverpool Football Club', 'magyar', 'Jelenleg is aktív'),
+(5, 'Cristiano Ronaldo', 39, 'Férfi', 'csatár', 85.00, 187.00, 'CF Andorinha\r\nNacional\r\nSporting\r\nManchester United\r\nReal Madrid\r\nJuventus\r\nManchester United', 'En-Naszr FC', 'portugál', 'Jelenleg is aktív'),
+(6, 'Lionel Messi', 37, 'Férfi', 'szélső és támadó középpályás', 72.00, 170.00, 'Newell’s Old Boys\r\nFC Barcelona\r\nParis Saint-Germain', 'Inter Miami CF', 'argentin, spanyol', 'Jelenleg is aktív'),
+(7, 'Mohamed Szaláh Gáli', 32, 'Férfi', 'szélső támadó', 72.00, 175.00, 'al-Mukavilun\r\nBasel\r\nChelsea\r\nFiorentina\r\nRoma', 'Liverpool Football Club', 'egyiptomi', 'Jelenleg is aktív');
 
 -- --------------------------------------------------------
 
@@ -172,6 +174,7 @@ ALTER TABLE `felhasznalok`
 --
 ALTER TABLE `sportolok`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+COMMIT;
 
 --
 -- AUTO_INCREMENT a táblához `tanacsok`
