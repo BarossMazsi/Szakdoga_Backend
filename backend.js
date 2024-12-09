@@ -149,8 +149,49 @@ app.get('/Tanacsoklista', (req, res) => {
     connection.end();
 });
 
+app.post('/regisztracio', (req, res) => {
+    kapcsolat();
+    connection.query('select felh_nev from felhasznalok where felh_nev=? ',[req.body.bevitel1], (err, rows, fields) => {
+        if (err) {
+            console.log(err)
+            res.status(500).send("Hiba")
+        }
+        else{
+            console.log(rows)
+            if (rows.length!=0) {
+                  res.status(500).send("A felhasználónév már létezik!")
+            } else {
+                    kapcsolat()
+                    connection.query('insert into felhasznalok values (null,?,?)',[req.body.bevitel1, req.body.bevitel2], (err, rows, fields) => {
+                      if (err) {
+                          console.log(err)
+                          res.status(500).send("Hiba")
+                      }
+                      else{
+                          console.log(rows)
+                          res.status(200).send("Sikeres regisztráció!")
+                      }
+                    })            
+                   }
+        }
+      })
+      connection.end()
+  });
 
-
+  app.post('/beleptetes', (req, res) => {
+    kapcsolat();
+    connection.query('select fel_id,felh_nev from felhasznalok where felh_nev=? and felh_jelszo=?',[req.body.bevitel1, req.body.bevitel2], (err, rows, fields) => {
+        if (err) {
+            console.log(err)
+            res.status(500).send([])
+        }
+        else{
+            console.log(rows)
+            res.status(200).send(rows)
+        }
+      })
+      connection.end()
+  });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
