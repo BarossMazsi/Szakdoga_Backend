@@ -37,18 +37,19 @@ CREATE TABLE `felhasznalok` (
   `felh_mag` int(11) NOT NULL,
   `felh_suly` int(11) NOT NULL,
   `felh_nem` enum('Férfi','Nő','Semleges') NOT NULL,
-  `felh_szeret` varchar(255) NOT NULL
+  `felh_szeret` varchar(255) NOT NULL,
+  `felh_kepek` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `felhasznalok`
 --
 
-INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `felh_mag`, `felh_suly`, `felh_nem`, `felh_szeret`) VALUES
-(1, NULL, NULL, 'Botond', 180, 80, 'Férfi', 'Mindent'),
-(2, NULL, NULL, 'Szabolcs', 190, 75, 'Férfi', 'mindent'),
-(3, NULL, NULL, 'Robesz', 187, 80, 'Férfi', 'Gluténerzékeny'),
-(4, NULL, NULL, 'Mazsi', 185, 65, 'Férfi', 'Mindent');
+INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `felh_mag`, `felh_suly`, `felh_nem`, `felh_szeret`, `felh_kepek`) VALUES
+(1, NULL, NULL, 'Botond', 180, 80, 'Férfi', 'Mindent', ''),
+(2, NULL, NULL, 'Szabolcs', 190, 75, 'Férfi', 'mindent', ''),
+(3, NULL, NULL, 'Robesz', 187, 80, 'Férfi', 'Gluténerzékeny', ''),
+(4, NULL, NULL, 'Mazsi', 185, 65, 'Férfi', 'Mindent', '');
 
 -- --------------------------------------------------------
 
@@ -169,6 +170,7 @@ ALTER TABLE `video`
 --
 ALTER TABLE `felhasznalok`
   MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
 
 --
 -- AUTO_INCREMENT a táblához `sportolok`
