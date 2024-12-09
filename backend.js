@@ -193,6 +193,19 @@ app.post('/regisztracio', (req, res) => {
       connection.end()
   });
 
+  app.get('/felhasznalok', (req, res) => {
+    kapcsolat();
+    connection.query('SELECT * FROM felhasznalok', (err, rows) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Hiba");
+        } else {
+            console.log(rows);
+            res.status(200).send(rows);
+        }
+    })
+    connection.end()
+});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
