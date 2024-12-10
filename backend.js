@@ -1,5 +1,6 @@
 const express = require('express')
 const mysql = require('mysql')
+const bcrypt = require('bcryptjs');
 var cors = require('cors')
 
 const app = express()
@@ -150,48 +151,85 @@ app.get('/Tanacsoklista', (req, res) => {
 });
 
 app.post('/regisztracio', (req, res) => {
-    kapcsolat();
-    connection.query('select felh_nev from felhasznalok where felh_nev=? ',[req.body.bevitel1], (err, rows, fields) => {
-        if (err) {
-            console.log(err)
-            res.status(500).send("Hiba")
-        }
-        else{
-            console.log(rows)
-            if (rows.length!=0) {
-                  res.status(500).send("A felhasználónév már létezik!")
-            } else {
-                    kapcsolat()
-                    connection.query('insert into felhasznalok values (null,?,?)',[req.body.bevitel1, req.body.bevitel2], (err, rows, fields) => {
-                      if (err) {
-                          console.log(err)
-                          res.status(500).send("Hiba")
-                      }
-                      else{
-                          console.log(rows)
-                          res.status(200).send("Sikeres regisztráció!")
-                      }
-                    })            
-                   }
-        }
-      })
-      connection.end()
-  });
+  const { bevitel1, bevitel2 } = req.body;
 
-  app.post('/beleptetes', (req, res) => {
-    kapcsolat();
-    connection.query('select fel_id,felh_nev from felhasznalok where felh_nev=? and felh_jelszo=?',[req.body.bevitel1, req.body.bevitel2], (err, rows, fields) => {
-        if (err) {
-            console.log(err)
-            res.status(500).send([])
+  // Check if username already exists
+  kapcsolat();
+  connection.query(
+    'SELECT felh_nev FROM felhasznalok WHERE felh_nev = ?',
+    [bevitel1],
+    (err, rows, fields) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Hiba');
+      } else {
+        if (rows.length !== 0) {
+          res.status(500).send('A felhasználónév már létezik!');
+        } else {
+          // Hash the password before inserting
+          bcrypt.hash(bevitel2, 10, (err, hashedPassword) => {
+            if (err) {
+              console.log(err);
+              res.status(500).send('Hiba a jelszó hash-elés során');
+            } else {
+              // Insert new user with hashed password
+              kapcsolat();
+              connection.query(
+                'INSERT INTO felhasznalok (felh_nev, felh_jelszo) VALUES (?, ?)',
+                [bevitel1, hashedPassword],
+                (err, rows, fields) => {
+                  if (err) {
+                    console.log(err);
+                    res.status(500).send('Hiba');
+                  } else {
+                    console.log(rows);
+                    res.status(200).send('Sikeres regisztráció!');
+                  }
+                }
+              );
+            }
+          });
         }
-        else{
-            console.log(rows)
-            res.status(200).send(rows)
+      }
+    }
+  );
+  connection.end();
+});
+
+app.post('/beleptetes', (req, res) => {
+  const { bevitel1, bevitel2 } = req.body;
+
+  kapcsolat();
+  connection.query(
+    'SELECT fel_id, felh_nev, felh_jelszo FROM felhasznalok WHERE felh_nev = ?',
+    [bevitel1],
+    (err, rows, fields) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send([]);
+      } else {
+        if (rows.length === 0) {
+          res.status(400).send('Felhasználó nem található!');
+        } else {
+          const hashedPassword = rows[0].felh_jelszo;
+          
+          // Compare the provided password with the hashed one
+          bcrypt.compare(bevitel2, hashedPassword, (err, isMatch) => {
+            if (err) {
+              console.log(err);
+              res.status(500).send('Hiba a jelszó összehasonlítás során');
+            } else if (isMatch) {
+              res.status(200).send(rows);
+            } else {
+              res.status(400).send('Hibás jelszó');
+            }
+          });
         }
-      })
-      connection.end()
-  });
+      }
+    }
+  );
+  connection.end();
+});
 
   app.get('/felhasznalok', (req, res) => {
     kapcsolat();
