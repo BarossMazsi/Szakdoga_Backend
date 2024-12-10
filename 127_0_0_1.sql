@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Nov 28. 10:58
+-- Létrehozás ideje: 2024. Dec 10. 10:49
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -36,20 +36,21 @@ CREATE TABLE `felhasznalok` (
   `felh_nev` varchar(255) NOT NULL,
   `felh_mag` int(11) NOT NULL,
   `felh_suly` int(11) NOT NULL,
-  `felh_nem` enum('Férfi','Nő','Semleges') NOT NULL,
-  `felh_szeret` varchar(255) NOT NULL,
-  `felh_kepek` varchar(255) NOT NULL
+  `felh_nem` int(11) NOT NULL,
+  `felh_nemszeret` varchar(255) NOT NULL,
+  `felh_kep` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `felhasznalok`
 --
 
-INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `felh_mag`, `felh_suly`, `felh_nem`, `felh_szeret`, `felh_kepek`) VALUES
-(1, NULL, NULL, 'Botond', 180, 80, 'Férfi', 'Mindent', ''),
-(2, NULL, NULL, 'Szabolcs', 190, 75, 'Férfi', 'mindent', ''),
-(3, NULL, NULL, 'Robesz', 187, 80, 'Férfi', 'Gluténerzékeny', ''),
-(4, NULL, NULL, 'Mazsi', 185, 65, 'Férfi', 'Mindent', '');
+INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `felh_mag`, `felh_suly`, `felh_nem`, `felh_nemszeret`, `felh_kep`) VALUES
+(1, NULL, NULL, 'Botond', 180, 80, 1, 'Mindent', ''),
+(2, NULL, NULL, 'Szabolcs', 190, 75, 1, 'mindent', ''),
+(3, NULL, NULL, 'Robesz', 187, 80, 1, 'Gluténerzékeny', ''),
+(4, NULL, NULL, 'Mazsi', 185, 65, 1, 'Mindent', ''),
+(5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -169,15 +170,13 @@ ALTER TABLE `video`
 -- AUTO_INCREMENT a táblához `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
-  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-COMMIT;
+  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT a táblához `sportolok`
 --
 ALTER TABLE `sportolok`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-COMMIT;
 
 --
 -- AUTO_INCREMENT a táblához `tanacsok`
