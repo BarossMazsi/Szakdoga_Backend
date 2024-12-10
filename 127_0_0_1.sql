@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Dec 10. 10:49
+-- Létrehozás ideje: 2024. Dec 10. 10:58
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -22,6 +22,29 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `focis_mobil` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
 USE `focis_mobil`;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `edzes`
+--
+
+CREATE TABLE `edzes` (
+  `edzes_id` int(11) NOT NULL,
+  `edzes_felhid` int(11) NOT NULL,
+  `edzes_datum` date NOT NULL,
+  `edzes_tipus` int(11) NOT NULL,
+  `edzes_idotartam` int(11) NOT NULL,
+  `edzes_egetes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `edzes`
+--
+
+INSERT INTO `edzes` (`edzes_id`, `edzes_felhid`, `edzes_datum`, `edzes_tipus`, `edzes_idotartam`, `edzes_egetes`) VALUES
+(1, 1, '2024-12-06', 1, 30, 500),
+(2, 4, '2024-12-06', 1, 60, 500);
 
 -- --------------------------------------------------------
 
@@ -113,6 +136,29 @@ INSERT INTO `tanacsok` (`id`, `tanacs_cim`, `tanacs_szoveg`, `datum`, `sportoloi
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `tipus`
+--
+
+CREATE TABLE `tipus` (
+  `tipus_id` int(11) NOT NULL,
+  `tipus_nev` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `tipus`
+--
+
+INSERT INTO `tipus` (`tipus_id`, `tipus_nev`) VALUES
+(1, 'futás'),
+(2, 'Állóképességi edzés'),
+(3, 'Technikai edzés'),
+(4, 'Gyorsasági edzés'),
+(5, 'Erőnléti edzés'),
+(6, 'Taktikai edzés');
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `video`
 --
 
@@ -137,6 +183,14 @@ INSERT INTO `video` (`video_id`, `video_felh`, `video_link`) VALUES
 --
 
 --
+-- A tábla indexei `edzes`
+--
+ALTER TABLE `edzes`
+  ADD PRIMARY KEY (`edzes_id`),
+  ADD KEY `edzes_felhid` (`edzes_felhid`),
+  ADD KEY `edzes_tipus` (`edzes_tipus`);
+
+--
 -- A tábla indexei `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
@@ -156,6 +210,12 @@ ALTER TABLE `tanacsok`
   ADD KEY `sportoloid` (`sportoloid`);
 
 --
+-- A tábla indexei `tipus`
+--
+ALTER TABLE `tipus`
+  ADD PRIMARY KEY (`tipus_id`);
+
+--
 -- A tábla indexei `video`
 --
 ALTER TABLE `video`
@@ -165,6 +225,12 @@ ALTER TABLE `video`
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
+
+--
+-- AUTO_INCREMENT a táblához `edzes`
+--
+ALTER TABLE `edzes`
+  MODIFY `edzes_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `felhasznalok`
@@ -185,6 +251,12 @@ ALTER TABLE `tanacsok`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT a táblához `tipus`
+--
+ALTER TABLE `tipus`
+  MODIFY `tipus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT a táblához `video`
 --
 ALTER TABLE `video`
@@ -193,6 +265,13 @@ ALTER TABLE `video`
 --
 -- Megkötések a kiírt táblákhoz
 --
+
+--
+-- Megkötések a táblához `edzes`
+--
+ALTER TABLE `edzes`
+  ADD CONSTRAINT `edzes_ibfk_1` FOREIGN KEY (`edzes_felhid`) REFERENCES `felhasznalok` (`fel_id`),
+  ADD CONSTRAINT `edzes_ibfk_2` FOREIGN KEY (`edzes_tipus`) REFERENCES `tipus` (`tipus_id`);
 
 --
 -- Megkötések a táblához `tanacsok`
