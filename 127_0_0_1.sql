@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Dec 10. 12:06
+-- Létrehozás ideje: 2024. Dec 10. 13:24
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -223,6 +223,19 @@ ALTER TABLE `nemek`
   ADD PRIMARY KEY (`id`);
 
 --
+-- A tábla indexei `sportolok`
+--
+ALTER TABLE `sportolok`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- A tábla indexei `tanacsok`
+--
+ALTER TABLE `tanacsok`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sportoloid` (`sportoloid`);
+
+--
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
 
@@ -239,6 +252,18 @@ ALTER TABLE `nemek`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT a táblához `sportolok`
+--
+ALTER TABLE `sportolok`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT a táblához `tanacsok`
+--
+ALTER TABLE `tanacsok`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- Megkötések a kiírt táblákhoz
 --
 
@@ -247,6 +272,12 @@ ALTER TABLE `nemek`
 --
 ALTER TABLE `felhasznalok`
   ADD CONSTRAINT `felhasznalok_ibfk_1` FOREIGN KEY (`felh_nem`) REFERENCES `nemek` (`id`);
+
+--
+-- Megkötések a táblához `tanacsok`
+--
+ALTER TABLE `tanacsok`
+  ADD CONSTRAINT `tanacsok_ibfk_1` FOREIGN KEY (`sportoloid`) REFERENCES `sportolok` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
