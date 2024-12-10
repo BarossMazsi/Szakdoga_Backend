@@ -156,7 +156,7 @@ app.post('/regisztracio', (req, res) => {
   // Check if username already exists
   kapcsolat();
   connection.query(
-    'SELECT felh_nev FROM felhasznalok WHERE felh_nev = ?',
+    'SELECT felh_email FROM felhasznalok WHERE felh_email = ?',
     [bevitel1],
     (err, rows, fields) => {
       if (err) {
@@ -175,7 +175,7 @@ app.post('/regisztracio', (req, res) => {
               // Insert new user with hashed password
               kapcsolat();
               connection.query(
-                'INSERT INTO felhasznalok (felh_nev, felh_jelszo) VALUES (?, ?)',
+                `INSERT INTO felhasznalok VALUES (null, ?, ?, "",0,0,0,"","")`,
                 [bevitel1, hashedPassword],
                 (err, rows, fields) => {
                   if (err) {
@@ -201,7 +201,7 @@ app.post('/beleptetes', (req, res) => {
 
   kapcsolat();
   connection.query(
-    'SELECT fel_id, felh_nev, felh_jelszo FROM felhasznalok WHERE felh_nev = ?',
+    'SELECT fel_id, felh_email, felh_jelszo FROM felhasznalok WHERE felh_email = ?',
     [bevitel1],
     (err, rows, fields) => {
       if (err) {
