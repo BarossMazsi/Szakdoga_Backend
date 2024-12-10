@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Dec 10. 10:58
+-- Létrehozás ideje: 2024. Dec 10. 11:30
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -74,6 +74,25 @@ INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `
 (3, NULL, NULL, 'Robesz', 187, 80, 1, 'Gluténerzékeny', ''),
 (4, NULL, NULL, 'Mazsi', 185, 65, 1, 'Mindent', ''),
 (5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 0, '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `nemek`
+--
+
+CREATE TABLE `nemek` (
+  `id` int(11) NOT NULL,
+  `nem` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `nemek`
+--
+
+INSERT INTO `nemek` (`id`, `nem`) VALUES
+(1, 'Férfi'),
+(2, 'Nő');
 
 -- --------------------------------------------------------
 
@@ -194,7 +213,14 @@ ALTER TABLE `edzes`
 -- A tábla indexei `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
-  ADD PRIMARY KEY (`fel_id`);
+  ADD PRIMARY KEY (`fel_id`),
+  ADD KEY `felh_nem` (`felh_nem`);
+
+--
+-- A tábla indexei `nemek`
+--
+ALTER TABLE `nemek`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- A tábla indexei `sportolok`
@@ -237,6 +263,12 @@ ALTER TABLE `edzes`
 --
 ALTER TABLE `felhasznalok`
   MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT a táblához `nemek`
+--
+ALTER TABLE `nemek`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `sportolok`
