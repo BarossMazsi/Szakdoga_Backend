@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Dec 10. 11:30
+-- Létrehozás ideje: 2024. Dec 10. 12:06
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -73,7 +73,7 @@ INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `
 (2, NULL, NULL, 'Szabolcs', 190, 75, 1, 'mindent', ''),
 (3, NULL, NULL, 'Robesz', 187, 80, 1, 'Gluténerzékeny', ''),
 (4, NULL, NULL, 'Mazsi', 185, 65, 1, 'Mindent', ''),
-(5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 0, '', '');
+(5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 1, '', '');
 
 -- --------------------------------------------------------
 
@@ -223,40 +223,8 @@ ALTER TABLE `nemek`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `sportolok`
---
-ALTER TABLE `sportolok`
-  ADD PRIMARY KEY (`ID`);
-
---
--- A tábla indexei `tanacsok`
---
-ALTER TABLE `tanacsok`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sportoloid` (`sportoloid`);
-
---
--- A tábla indexei `tipus`
---
-ALTER TABLE `tipus`
-  ADD PRIMARY KEY (`tipus_id`);
-
---
--- A tábla indexei `video`
---
-ALTER TABLE `video`
-  ADD PRIMARY KEY (`video_id`),
-  ADD KEY `video_felh` (`video_felh`);
-
---
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
-
---
--- AUTO_INCREMENT a táblához `edzes`
---
-ALTER TABLE `edzes`
-  MODIFY `edzes_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `felhasznalok`
@@ -271,51 +239,14 @@ ALTER TABLE `nemek`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT a táblához `sportolok`
---
-ALTER TABLE `sportolok`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT a táblához `tanacsok`
---
-ALTER TABLE `tanacsok`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT a táblához `tipus`
---
-ALTER TABLE `tipus`
-  MODIFY `tipus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT a táblához `video`
---
-ALTER TABLE `video`
-  MODIFY `video_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- Megkötések a kiírt táblákhoz
 --
 
 --
--- Megkötések a táblához `edzes`
+-- Megkötések a táblához `felhasznalok`
 --
-ALTER TABLE `edzes`
-  ADD CONSTRAINT `edzes_ibfk_1` FOREIGN KEY (`edzes_felhid`) REFERENCES `felhasznalok` (`fel_id`),
-  ADD CONSTRAINT `edzes_ibfk_2` FOREIGN KEY (`edzes_tipus`) REFERENCES `tipus` (`tipus_id`);
-
---
--- Megkötések a táblához `tanacsok`
---
-ALTER TABLE `tanacsok`
-  ADD CONSTRAINT `tanacsok_ibfk_1` FOREIGN KEY (`sportoloid`) REFERENCES `sportolok` (`ID`);
-
---
--- Megkötések a táblához `video`
---
-ALTER TABLE `video`
-  ADD CONSTRAINT `video_ibfk_1` FOREIGN KEY (`video_felh`) REFERENCES `felhasznalok` (`fel_id`);
+ALTER TABLE `felhasznalok`
+  ADD CONSTRAINT `felhasznalok_ibfk_1` FOREIGN KEY (`felh_nem`) REFERENCES `nemek` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
