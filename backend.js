@@ -247,7 +247,7 @@ app.post('/beleptetes', (req, res) => {
 
   app.get('/felhasznalok', (req, res) => {
     kapcsolat();
-    connection.query('SELECT * FROM felhasznalok', (err, rows) => {
+    connection.query(`SELECT * FROM felhasznalok INNER JOIN nemek ON felhasznalok.felh_nem = nemek.id`, (err, rows) => {
         if (err) {
             console.log(err);
             res.status(500).send("Hiba");
@@ -258,6 +258,19 @@ app.post('/beleptetes', (req, res) => {
     })
     connection.end()
 });
+
+app.put('/felhasznalokmodositas', (req, res) => {
+    kapcsolat()
+      connection.connect()    
+      connection.query(`UPDATE felhasznalok SET felh_nev= "${req.body.felh_nev}", felh_mag=${req.body.felh_mag}, felh_suly=${req.body.felh_suly}, felh_nem=${req.body.felh_nem}, felh_nemszeret="${req.body.felh_nemszeret}", felh_kep="${req.body.felh_kep}", WHERE fel_id= ${req.body.fel_id}`, (err, rows, fields) => {
+        if (err) 
+          res.send("Hiba") 
+        else 
+        res.send("A felhasznalok módosítás sikerült")
+      })    
+      connection.end()
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
