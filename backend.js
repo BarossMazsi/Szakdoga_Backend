@@ -92,11 +92,11 @@ app.get('/EdzesTipusok', (req, res) => {
 
 
   app.post('/EdzesFelvitel', (req, res) => {
-       
-  
+    const datum = new Date();  
+    const jodatum=datum.getFullYear()+"-"+(datum.getMonth()+1)+"-"+datum.getDate()
     // Új edzés adat rögzítése
-    const query = 'INSERT INTO edzes  VALUES (null,4 ,?, ?, ?,?)';
-    const values = [req.body.bevitel1,req.body.bevitel2,req.body.bevitel3,req.body.bevitel4];
+    const query = 'INSERT INTO edzes  VALUES (null,4 ,?, ?, ?,?,?,?)';
+    const values = [jodatum,req.body.tipus,req.body.idoTartam,req.body.egetes,req.body.leiras,req.body.megjegyzes];
   
     kapcsolat();
     connection.query(query, values, (err, result) => {
@@ -109,6 +109,17 @@ app.get('/EdzesTipusok', (req, res) => {
     connection.end();
   });
 
+  app.get('/EdzesLekerdez', (req, res) => {
+    kapcsolat();  // Kapcsolódás az adatbázishoz
+    connection.query('SELECT edzes_id , edzes_datum , edzes_tipus , edzes_idotartam edzes_', (err, rows) => {
+      if (err) {
+        console.error('Hiba történt az edzések lekérdezésekor:', err);
+        return res.status(500).send('Hiba történt az edzések lekérdezésekor.');
+      }
+      res.status(200).json(rows); // Edzéstípusok visszaadása
+    });
+    connection.end();
+  });
 
   app.get('/EdzesAtlag', (req, res) => {
     kapcsolat();  // Kapcsolódás az adatbázishoz
