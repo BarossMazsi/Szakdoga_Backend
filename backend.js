@@ -189,7 +189,7 @@ app.post('/regisztracio', (req, res) => {
               // Insert new user with hashed password
               kapcsolat();
               connection.query(
-                `INSERT INTO felhasznalok VALUES (null, ?, ?, "",0,0,0,"","")`,
+                `INSERT INTO felhasznalok VALUES (null, ?, ?, "",0,0,1,"","")`,
                 [bevitel1, hashedPassword],
                 (err, rows, fields) => {
                   if (err) {
@@ -270,6 +270,24 @@ app.put('/felhasznalokmodositas', (req, res) => {
       })    
       connection.end()
 });
+
+app.post('/uzenetfelvitel', (req, res) => {
+       
+  
+    // Új edzés adat rögzítése
+    const query = 'INSERT INTO uzenet  VALUES (null,?,?,?,?)';
+    const values = [req.body.bevitel1,req.body.bevitel2,req.body.bevitel3,req.body.bevitel4];
+  
+    kapcsolat();
+    connection.query(query, values, (err, result) => {
+      if (err) {
+        console.error('Hiba történt az üzenet rögzítésekor:', err);
+        return res.status(500).send('Hiba történt az üzenet rögzítésekor.');
+      }
+      res.status(200).send({ message: 'Üzenet rögzítve!' });
+    });
+    connection.end();
+  });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

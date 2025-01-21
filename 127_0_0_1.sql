@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Dec 10. 13:24
+-- Létrehozás ideje: 2025. Jan 21. 11:49
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -73,7 +73,8 @@ INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `
 (2, NULL, NULL, 'Szabolcs', 190, 75, 1, 'mindent', ''),
 (3, NULL, NULL, 'Robesz', 187, 80, 1, 'Gluténerzékeny', ''),
 (4, NULL, NULL, 'Mazsi', 185, 65, 1, 'Mindent', ''),
-(5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 1, '', '');
+(5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 1, '', ''),
+(8, 'Bb', '$2a$10$2hbYMA8DFVlxI8/qom.fx.AHJsPINnZDRBIAV5CF26SY0Zd/NwNd.', '', 0, 0, 1, '', '');
 
 -- --------------------------------------------------------
 
@@ -178,6 +179,35 @@ INSERT INTO `tipus` (`tipus_id`, `tipus_nev`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `uzenet`
+--
+
+CREATE TABLE `uzenet` (
+  `uzenet_id` int(11) NOT NULL,
+  `felado` int(11) NOT NULL,
+  `cimzett` int(11) NOT NULL,
+  `szoveg` varchar(255) NOT NULL,
+  `datum` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `uzenet`
+--
+
+INSERT INTO `uzenet` (`uzenet_id`, `felado`, `cimzett`, `szoveg`, `datum`) VALUES
+(1, 5, 5, 'Hello', '2025-01-20'),
+(2, 5, 1, 'Hello', '2025-01-20'),
+(3, 5, 2, 'Hello', '2025-01-20'),
+(4, 5, 2, 'Sajt', '2025-01-20'),
+(5, 5, 2, 'Hali', '2025-01-20'),
+(6, 5, 1, 'Sajt', '2025-01-20'),
+(7, 5, 1, 'E', '2025-01-20'),
+(8, 5, 1, 'Teszt', '2025-01-20'),
+(9, 8, 1, 'Hali', '2025-01-20');
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `video`
 --
 
@@ -236,6 +266,12 @@ ALTER TABLE `tanacsok`
   ADD KEY `sportoloid` (`sportoloid`);
 
 --
+-- A tábla indexei `uzenet`
+--
+ALTER TABLE `uzenet`
+  ADD PRIMARY KEY (`uzenet_id`);
+
+--
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
 
@@ -243,7 +279,7 @@ ALTER TABLE `tanacsok`
 -- AUTO_INCREMENT a táblához `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
-  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT a táblához `nemek`
@@ -262,6 +298,12 @@ ALTER TABLE `sportolok`
 --
 ALTER TABLE `tanacsok`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT a táblához `uzenet`
+--
+ALTER TABLE `uzenet`
+  MODIFY `uzenet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Megkötések a kiírt táblákhoz
