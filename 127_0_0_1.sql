@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Jan 21. 11:49
+-- Létrehozás ideje: 2025. Jan 22. 08:31
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -74,7 +74,8 @@ INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `
 (3, NULL, NULL, 'Robesz', 187, 80, 1, 'Gluténerzékeny', ''),
 (4, NULL, NULL, 'Mazsi', 185, 65, 1, 'Mindent', ''),
 (5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 1, '', ''),
-(8, 'Bb', '$2a$10$2hbYMA8DFVlxI8/qom.fx.AHJsPINnZDRBIAV5CF26SY0Zd/NwNd.', '', 0, 0, 1, '', '');
+(8, 'Bb', '$2a$10$2hbYMA8DFVlxI8/qom.fx.AHJsPINnZDRBIAV5CF26SY0Zd/NwNd.', '', 0, 0, 1, '', ''),
+(9, 'A', '$2a$10$LHz.V04h449VQPvtUmqEV.YNDTVtJ1ZvXGOAYjUCflVM.tQHyONcO', '', 0, 0, 1, '', '');
 
 -- --------------------------------------------------------
 
@@ -113,21 +114,22 @@ CREATE TABLE `sportolok` (
   `Jelenlegi_csapata` varchar(100) CHARACTER SET utf8 COLLATE utf8_hungarian_ci DEFAULT NULL,
   `Allampolgarsag` varchar(111) NOT NULL,
   `Statusza` varchar(100) NOT NULL,
-  `Kepek` varchar(255) NOT NULL
+  `Kepek` varchar(255) NOT NULL,
+  `wikipedia` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `sportolok`
 --
 
-INSERT INTO `sportolok` (`ID`, `Nev`, `Kor`, `Nem`, `Pozicio`, `Suly`, `Magassag`, `Elozo_Csapatai`, `Jelenlegi_csapata`, `Allampolgarsag`, `Statusza`, `Kepek`) VALUES
-(1, 'Kovács Péter', 46, 'Férfi', 'Csatár', 97.00, 198.00, 'Újpest FC\r\nVác FC\r\nFC Lahti\r\nFC Haka\r\nTromsø IL\r\nViking FK\r\nStrømsgodset\r\nOdd Grenland\r\nLierse SK', 'Arendal Fotball', 'magyar', 'Jelenleg is aktív', 'Kovacs_Peter.png'),
-(2, 'Csiszár Henrietta', 30, 'Nő', 'középpályás', 58.00, 164.00, 'Hajdúnánás FK\r\nFerencvárosi TC\r\nBelvárosi NLC\r\nMTK Hungária FC\r\nASA Tîrgu Mureş\r\n1. FC Lübars\r\nBayer', 'Football Club Internazionale Milano', 'magyar', 'Jelenleg is aktív', 'Csiszar_Henrietta.png'),
-(3, 'Puskás Ferenc', 79, 'Férfi', 'csatár (balösszekötő)', 72.00, 172.00, 'Kispest AC / Bp. Honvéd', 'Real Madrid', 'magyar, spanyol', 'Elhunyt', 'Puskas_Ferenc.png'),
-(4, 'Szoboszlai Dominik', 24, 'Férfi', 'középpályás', 74.00, 187.00, 'Videoton\r\nFőnix Gold\r\nMTK Budapest\r\nSalzburg\r\nLiefering\r\nRB Leipzig', 'Liverpool Football Club', 'magyar', 'Jelenleg is aktív', 'Szoboszlai_Dominik.png'),
-(5, 'Cristiano Ronaldo', 39, 'Férfi', 'csatár', 85.00, 187.00, 'CF Andorinha\r\nNacional\r\nSporting\r\nManchester United\r\nReal Madrid\r\nJuventus\r\nManchester United', 'En-Naszr FC', 'portugál', 'Jelenleg is aktív', 'Cristiano_Ronaldo.png'),
-(6, 'Lionel Messi', 37, 'Férfi', 'szélső és támadó középpályás', 72.00, 170.00, 'Newell’s Old Boys\r\nFC Barcelona\r\nParis Saint-Germain', 'Inter Miami CF', 'argentin, spanyol', 'Jelenleg is aktív', 'Lionel_Messi.png'),
-(7, 'Mohamed Szaláh Gáli', 32, 'Férfi', 'szélső támadó', 72.00, 175.00, 'al-Mukavilun\r\nBasel\r\nChelsea\r\nFiorentina\r\nRoma', 'Liverpool Football Club', 'egyiptomi', 'Jelenleg is aktív', 'Mohamed_Szalah_Gali.png');
+INSERT INTO `sportolok` (`ID`, `Nev`, `Kor`, `Nem`, `Pozicio`, `Suly`, `Magassag`, `Elozo_Csapatai`, `Jelenlegi_csapata`, `Allampolgarsag`, `Statusza`, `Kepek`, `wikipedia`) VALUES
+(1, 'Kovács Péter', 46, 'Férfi', 'Csatár', 97.00, 198.00, 'Újpest FC\r\nVác FC\r\nFC Lahti\r\nFC Haka\r\nTromsø IL\r\nViking FK\r\nStrømsgodset\r\nOdd Grenland\r\nLierse SK', 'Arendal Fotball', 'magyar', 'Jelenleg is aktív', 'Kovacs_Peter.png', 'https://hu.wikipedia.org/wiki/Kov%C3%A1cs_P%C3%A9ter_(labdar%C3%BAg%C3%B3,_1978)'),
+(2, 'Csiszár Henrietta', 30, 'Nő', 'középpályás', 58.00, 164.00, 'Hajdúnánás FK\r\nFerencvárosi TC\r\nBelvárosi NLC\r\nMTK Hungária FC\r\nASA Tîrgu Mureş\r\n1. FC Lübars\r\nBayer', 'Football Club Internazionale Milano', 'magyar', 'Jelenleg is aktív', 'Csiszar_Henrietta.png', 'https://hu.wikipedia.org/wiki/Csisz%C3%A1r_Henrietta'),
+(3, 'Puskás Ferenc', 79, 'Férfi', 'csatár (balösszekötő)', 72.00, 172.00, 'Kispest AC / Bp. Honvéd', 'Real Madrid', 'magyar, spanyol', 'Elhunyt', 'Puskas_Ferenc.png', 'https://hu.wikipedia.org/wiki/Pusk%C3%A1s_Ferenc_(labdar%C3%BAg%C3%B3)'),
+(4, 'Szoboszlai Dominik', 24, 'Férfi', 'középpályás', 74.00, 187.00, 'Videoton\r\nFőnix Gold\r\nMTK Budapest\r\nSalzburg\r\nLiefering\r\nRB Leipzig', 'Liverpool Football Club', 'magyar', 'Jelenleg is aktív', 'Szoboszlai_Dominik.png', 'https://hu.wikipedia.org/wiki/Szoboszlai_Dominik'),
+(5, 'Cristiano Ronaldo', 39, 'Férfi', 'csatár', 85.00, 187.00, 'CF Andorinha\r\nNacional\r\nSporting\r\nManchester United\r\nReal Madrid\r\nJuventus\r\nManchester United', 'En-Naszr FC', 'portugál', 'Jelenleg is aktív', 'Cristiano_Ronaldo.png', 'https://hu.wikipedia.org/wiki/Cristiano_Ronaldo'),
+(6, 'Lionel Messi', 37, 'Férfi', 'szélső és támadó középpályás', 72.00, 170.00, 'Newell’s Old Boys\r\nFC Barcelona\r\nParis Saint-Germain', 'Inter Miami CF', 'argentin, spanyol', 'Jelenleg is aktív', 'Lionel_Messi.png', 'https://hu.wikipedia.org/wiki/Lionel_Messi'),
+(7, 'Mohamed Szaláh Gáli', 32, 'Férfi', 'szélső támadó', 72.00, 175.00, 'al-Mukavilun\r\nBasel\r\nChelsea\r\nFiorentina\r\nRoma', 'Liverpool Football Club', 'egyiptomi', 'Jelenleg is aktív', 'Mohamed_Szalah_Gali.png', 'https://hu.wikipedia.org/wiki/Mohamed_Szal%C3%A1h');
 
 -- --------------------------------------------------------
 
@@ -279,7 +281,7 @@ ALTER TABLE `uzenet`
 -- AUTO_INCREMENT a táblához `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
-  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT a táblához `nemek`
