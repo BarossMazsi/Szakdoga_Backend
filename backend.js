@@ -1,6 +1,8 @@
 const express = require('express')
 const mysql = require('mysql')
 const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 var cors = require('cors')
 
 const app = express()
@@ -9,7 +11,9 @@ const port = 3000
 app.use(cors())
 app.use(express.json());
 app.use(express.static('kepek'));
+app.use(bodyParser.json());
 
+const SECRET_KEY = 'your_secret_key';
 
 var connection
 function kapcsolat(){
@@ -299,6 +303,82 @@ app.post('/uzenetfelvitel', (req, res) => {
     });
     connection.end();
   });
+
+//Webes---------------------------------------------------------------------------------------------------------------------------------------------------
+app.post('/web/login', (req, res) => {
+  const { username, password } = req.body;
+
+  kapcsolat()
+
+  const query = 'SELECT felh_email, felh_jelszo FROM felhasznalok inner join rang on rang_felhasznalo=fel_id WHERE felh_email = ? and rang_ertek=1';
+  connection.query(query, [username], (err, rows) => {
+    if (err) {
+      console.error('Adatbázis hiba:', err);
+      res.status(500).json({ message: 'Szerverhiba' });
+    } else if (rows.length === 0) {
+      res.status(404).json({ message: 'Felhasználó nem található' });
+    } else {
+      const hashedPassword = rows[0].felh_jelszo;
+
+      // Jelszó ellenőrzése bcrypt-tel
+      bcrypt.compare(password, hashedPassword, (err, isMatch) => {
+        if (err) {
+          console.error('Hiba a jelszó ellenőrzésekor:', err);
+          res.status(500).json({ message: 'Szerverhiba' });
+        } else if (isMatch) {
+          const token = jwt.sign({ username: rows[0].felh_email }, SECRET_KEY, {
+            expiresIn: '1h',
+          });
+          res.json({ token });
+        } else {
+          res.status(401).json({ message: 'Hibás jelszó' });
+        }
+      });
+    }
+  });
+
+  connection.end();
+});
+
+
+app.get('/Rangok', (req, res) => {
+  kapcsolat()
+  connection.query(`
+      SELECT felh_email, rang_ertek
+      FROM felhasznalok
+      INNER JOIN rang
+      ON fel_id=rang_felhasznalo
+    `, (err, rows, fields) => {
+    if (err) {
+      console.log("Hiba")
+      console.log(err)
+      res.status(500).send("Hiba")
+    }
+    else {
+      console.log(rows)
+      res.status(200).send(rows)
+    }
+  })
+  connection.end()
+})
+
+app.put('/RangokModosit', (req, res) => {
+  kapcsolat()
+  connection.query(`
+    UPDATE rang SET rang_ertek = ? where rang_felhasznalo = ? 
+    `,[req.body.bevitel1, req.body.bevitel2], (err, rows, fields) => {
+    if (err) {
+      console.log("Hiba")
+      console.log(err)
+      res.status(500).send("Hiba")
+    }
+    else {
+      console.log("Sikeres módosítás!")
+      res.status(200).send("Sikeres módosítás!")
+    }
+  })
+  connection.end()
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

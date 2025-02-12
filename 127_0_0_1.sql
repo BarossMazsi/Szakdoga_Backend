@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Jan 22. 08:31
+-- Létrehozás ideje: 2025. Feb 12. 10:16
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -69,13 +69,11 @@ CREATE TABLE `felhasznalok` (
 --
 
 INSERT INTO `felhasznalok` (`fel_id`, `felh_email`, `felh_jelszo`, `felh_nev`, `felh_mag`, `felh_suly`, `felh_nem`, `felh_nemszeret`, `felh_kep`) VALUES
-(1, NULL, NULL, 'Botond', 180, 80, 1, 'Mindent', ''),
-(2, NULL, NULL, 'Szabolcs', 190, 75, 1, 'mindent', ''),
-(3, NULL, NULL, 'Robesz', 187, 80, 1, 'Gluténerzékeny', ''),
-(4, NULL, NULL, 'Mazsi', 185, 65, 1, 'Mindent', ''),
 (5, 'Aa', '$2a$10$BZ.Nsm3Pl1cOo8aliFRfiONT7xMv3jGHc8ZVJsm2rpLAwOoVmUBAK', '', 0, 0, 1, '', ''),
 (8, 'Bb', '$2a$10$2hbYMA8DFVlxI8/qom.fx.AHJsPINnZDRBIAV5CF26SY0Zd/NwNd.', '', 0, 0, 1, '', ''),
-(9, 'A', '$2a$10$LHz.V04h449VQPvtUmqEV.YNDTVtJ1ZvXGOAYjUCflVM.tQHyONcO', '', 0, 0, 1, '', '');
+(9, 'A', '$2a$10$LHz.V04h449VQPvtUmqEV.YNDTVtJ1ZvXGOAYjUCflVM.tQHyONcO', '', 0, 0, 1, '', ''),
+(10, 'Admin', '$2a$10$zIAWJwmuIsg3gxPZOf5BMeXn/yyny1lTf.pdE1v17gUosSyWl.TmS', '', 0, 0, 1, '', ''),
+(11, 'Gaál István', '$2a$10$cDd0Cjh1uqc.fe8UbWQcTeL6vgigRL1YiJ4gNL6yfZufVrSn8W.lC', 'Gaál István', 175, 65, 1, 'zöldségek többsége', '');
 
 -- --------------------------------------------------------
 
@@ -95,6 +93,26 @@ CREATE TABLE `nemek` (
 INSERT INTO `nemek` (`id`, `nem`) VALUES
 (1, 'Férfi'),
 (2, 'Nő');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `rang`
+--
+
+CREATE TABLE `rang` (
+  `rang_id` int(11) NOT NULL,
+  `rang_felhasznalo` int(11) NOT NULL,
+  `rang_ertek` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `rang`
+--
+
+INSERT INTO `rang` (`rang_id`, `rang_felhasznalo`, `rang_ertek`) VALUES
+(1, 10, 1),
+(3, 11, 0);
 
 -- --------------------------------------------------------
 
@@ -255,6 +273,12 @@ ALTER TABLE `nemek`
   ADD PRIMARY KEY (`id`);
 
 --
+-- A tábla indexei `rang`
+--
+ALTER TABLE `rang`
+  ADD PRIMARY KEY (`rang_id`);
+
+--
 -- A tábla indexei `sportolok`
 --
 ALTER TABLE `sportolok`
@@ -281,13 +305,19 @@ ALTER TABLE `uzenet`
 -- AUTO_INCREMENT a táblához `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
-  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `fel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT a táblához `nemek`
 --
 ALTER TABLE `nemek`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT a táblához `rang`
+--
+ALTER TABLE `rang`
+  MODIFY `rang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT a táblához `sportolok`
