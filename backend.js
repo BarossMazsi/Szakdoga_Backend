@@ -125,9 +125,9 @@ app.get('/EdzesTipusok', (req, res) => {
     connection.end();
   });
 
-  app.get('/EdzesAtlag', (req, res) => {
+  app.post('/EdzesAtlag', (req, res) => {
     kapcsolat();  // Kapcsolódás az adatbázishoz
-    connection.query('SELECT edzes_felhid,edzes_tipus,AVG(edzes_idotartam), AVG(edzes_egetes) FROM edzes Group BY edzes_felhid,edzes_tipus', (err, rows) => {
+    connection.query('SELECT edzes_felhid,edzes_tipus,AVG(edzes_idotartam), AVG(edzes_egetes) FROM edzes Where edzes_felhid =? Group BY edzes_felhid,edzes_tipus ',[req.body.bevitel1] ,(err, rows) => {
       if (err) {
         console.error('Hiba történt az edzéstípusok lekérdezésekor:', err);
         return res.status(500).send('Hiba történt az edzéstípusok lekérdezésekor.');
@@ -136,7 +136,19 @@ app.get('/EdzesTipusok', (req, res) => {
     });
     connection.end();
   });
-
+/*
+  app.get('/EdzesAtlag', (req, res) => {
+    kapcsolat();  // Kapcsolódás az adatbázishoz
+    connection.query('SELECT edzes_felhid,edzes_tipus,AVG(edzes_idotartam), AVG(edzes_egetes) FROM edzes Group BY edzes_felhid,edzes_tipus ',[req.body.bevitel1] ,(err, rows) => {
+      if (err) {
+        console.error('Hiba történt az edzéstípusok lekérdezésekor:', err);
+        return res.status(500).send('Hiba történt az edzéstípusok lekérdezésekor.');
+      }
+      res.status(200).json(rows); // Edzéstípusok visszaadása
+    });
+    connection.end();
+  });
+*/
   
 //István végpontjai-------------------------------------------------------------------------------------
 app.get('/Sportoloklista', (req, res) => {
