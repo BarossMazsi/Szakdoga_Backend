@@ -362,23 +362,33 @@ app.get('/Rangok', (req, res) => {
   connection.end()
 })
 
-app.put('/RangokModosit', (req, res) => {
-  kapcsolat()
-  connection.query(`
-    UPDATE rang SET rang_ertek = ? where rang_felhasznalo = ? 
-    `,[req.body.bevitel1, req.body.bevitel2], (err, rows, fields) => {
-    if (err) {
-      console.log("Hiba")
-      console.log(err)
-      res.status(500).send("Hiba")
+app.patch('/Rangok/:email', (req, res) => {
+  const { email } = req.params;
+  const { rang_ertek } = req.body;
+
+  if (!rang_ertek) {
+    return res.status(400).send("Új rang értéket meg kell adni!");
+  }
+
+  kapcsolat();
+  connection.query(
+    `UPDATE rang 
+     INNER JOIN felhasznalok ON fel_id = rang_felhasznalo 
+     SET rang_ertek = ? 
+     WHERE felh_email = ?`,
+    [rang_ertek, email],
+    (err, result) => {
+      if (err) {
+        console.error("Hiba:", err);
+        res.status(500).send("Hiba történt a rang módosításakor");
+      } else {
+        res.status(200).send("Rang sikeresen módosítva");
+      }
     }
-    else {
-      console.log("Sikeres módosítás!")
-      res.status(200).send("Sikeres módosítás!")
-    }
-  })
-  connection.end()
-})
+  );
+  connection.end();
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
