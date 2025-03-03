@@ -244,6 +244,60 @@ app.post('/beleptetes', (req, res) => {
   connection.query(
     'SELECT fel_id, felh_email, felh_jelszo FROM felhasznalok WHERE felh_email = ?',
     [bevitel1],
+    (err, rows) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Szerverhiba');
+        connection.end();
+        return;
+      }
+
+      if (rows.length === 0) {
+        res.status(400).send('Felhasználó nem található!');
+        connection.end();
+        return;
+      }
+
+      const { fel_id, felh_jelszo } = rows[0];
+
+      // Compare the provided password with the hashed one
+      bcrypt.compare(bevitel2, felh_jelszo, (err, isMatch) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send('Hiba a jelszó összehasonlítás során');
+          connection.end();
+          return;
+        }
+
+        if (isMatch) {
+          // 🔹 **Belépés rögzítése az adatbázisba**
+          const insertQuery = `INSERT INTO belepes (szemely_id, belepes_idopont) VALUES (?, NOW())`;
+          connection.query(insertQuery, [fel_id], (err) => {
+            if (err) {
+              console.error('Hiba a belépés rögzítésénél:', err);
+            }
+          });
+
+          res.status(200).send(rows);
+        } else {
+          res.status(400).send('Hibás jelszó');
+        }
+
+        connection.end();
+      });
+    }
+  );
+});
+
+
+/*
+app.post('/beleptetes', (req, res) => {
+  const { bevitel1, bevitel2 } = req.body;
+
+  kapcsolat();
+  connection.query(
+    'SELECT fel_id, felh_email, felh_jelszo FROM felhasznalok WHERE felh_email = ?',
+    [bevitel1],
     (err, rows, fields) => {
       if (err) {
         console.log(err);
@@ -261,6 +315,8 @@ app.post('/beleptetes', (req, res) => {
               res.status(500).send('Hiba a jelszó összehasonlítás során');
             } else if (isMatch) {
               res.status(200).send(rows);
+
+              
             } else {
               res.status(400).send('Hibás jelszó');
             }
@@ -271,7 +327,7 @@ app.post('/beleptetes', (req, res) => {
   );
   connection.end();
 });
-
+*/
   app.get('/felhasznalok', (req, res) => {
     kapcsolat();
     connection.query(`SELECT * FROM felhasznalok INNER JOIN nemek ON felhasznalok.felh_nem = nemek.id`, (err, rows) => {
@@ -316,40 +372,116 @@ app.post('/uzenetfelvitel', (req, res) => {
     connection.end();
   });
 
+  app.get('/uzenetek', (req, res) => {
+    // Feltételezve, hogy a bejelentkezett felhasználó ID-ját a query paraméterben kapjuk (pl. ?felhasznalo_id=5)
+    const felhasznaloId = req.query.felhasznalo_id;
+
+    if (!felhasznaloId) {
+        return res.status(400).send("Felhasználó ID szükséges.");
+    }
+
+    kapcsolat();
+
+    // Az SQL lekérdezésben most szűrjük a cimzettet a felhasználó ID-jával
+    connection.query(
+        `SELECT * FROM uzenet 
+        INNER JOIN felhasznalok ON felhasznalok.fel_id = uzenet.felado
+        WHERE uzenet.cimzett = ?`, // Paraméteres lekérdezés a cimzett szűrésére
+        [felhasznaloId], // Bejelentkezett felhasználó ID-ját átadjuk
+        (err, rows) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send("Hiba történt az üzenetek lekérdezésekor.");
+            } else {
+                console.log(rows);
+                res.status(200).send(rows); // Az üzeneteket visszaküldjük
+            }
+        }
+    );
+
+    connection.end();
+});
+
 //Webes---------------------------------------------------------------------------------------------------------------------------------------------------
 app.post('/web/login', (req, res) => {
   const { username, password } = req.body;
 
-  kapcsolat()
+  kapcsolat(); // Adatbáziskapcsolat megnyitása
 
-  const query = 'SELECT felh_email, felh_jelszo FROM felhasznalok inner join rang on rang_felhasznalo=fel_id WHERE felh_email = ? and rang_ertek=1';
+  const query = `
+    SELECT fel_id, felh_email, felh_jelszo 
+    FROM felhasznalok 
+    INNER JOIN rang ON rang_felhasznalo = fel_id 
+    WHERE felh_email = ? AND rang_ertek = 1
+  `;
+
   connection.query(query, [username], (err, rows) => {
     if (err) {
       console.error('Adatbázis hiba:', err);
       res.status(500).json({ message: 'Szerverhiba' });
-    } else if (rows.length === 0) {
-      res.status(404).json({ message: 'Felhasználó nem található' });
-    } else {
-      const hashedPassword = rows[0].felh_jelszo;
-
-      // Jelszó ellenőrzése bcrypt-tel
-      bcrypt.compare(password, hashedPassword, (err, isMatch) => {
-        if (err) {
-          console.error('Hiba a jelszó ellenőrzésekor:', err);
-          res.status(500).json({ message: 'Szerverhiba' });
-        } else if (isMatch) {
-          const token = jwt.sign({ username: rows[0].felh_email }, SECRET_KEY, {
-            expiresIn: '1h',
-          });
-          res.json({ token });
-        } else {
-          res.status(401).json({ message: 'Hibás jelszó' });
-        }
-      });
+      connection.end();
+      return;
     }
-  });
 
-  connection.end();
+    if (rows.length === 0) {
+      res.status(404).json({ message: 'Felhasználó nem található' });
+      connection.end();
+      return;
+    }
+
+    const { fel_id, felh_email, felh_jelszo } = rows[0];
+
+    // Jelszó ellenőrzése bcrypt-tel
+    bcrypt.compare(password, felh_jelszo, (err, isMatch) => {
+      if (err) {
+        console.error('Hiba a jelszó ellenőrzésekor:', err);
+        res.status(500).json({ message: 'Szerverhiba' });
+        connection.end();
+        return;
+      }
+
+      if (isMatch) {
+        const token = jwt.sign({ username: felh_email }, SECRET_KEY, {
+          expiresIn: '1h',
+        });
+
+        // 🔹 **Belépés rögzítése az adatbázisba**
+        const insertQuery = `INSERT INTO belepes (szemely_id, belepes_idopont) VALUES (?, NOW())`;
+        connection.query(insertQuery, [fel_id], (err) => {
+          if (err) {
+            console.error('Hiba a belépés rögzítésénél:', err);
+          }
+        });
+
+        res.json({ token });
+      } else {
+        res.status(401).json({ message: 'Hibás jelszó' });
+      }
+
+      connection.end();
+    });
+  });
+});
+
+
+app.get('/Belepesek', (req, res) => {
+  kapcsolat();
+  connection.query(`
+  SELECT felh_email, COUNT(belepes_id) AS Belepes
+  FROM felhasznalok
+  INNER JOIN belepes
+  ON felhasznalok.fel_id = belepes.szemely_id
+  GROUP BY felh_email;
+  `, (err, rows) => {
+    if (err) {
+      console.log("Hiba", err);
+      res.status(500).send("Hiba");
+    } else {
+      console.log(rows);
+      res.status(200).json(rows);
+    }
+    connection.end(); // Csak itt zárd le!
+  });
 });
 
 
