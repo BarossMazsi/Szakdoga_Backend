@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Feb 12. 10:16
+-- Létrehozás ideje: 2025. Már 03. 12:49
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -22,6 +22,30 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `focis_mobil` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
 USE `focis_mobil`;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `belepes`
+--
+
+CREATE TABLE `belepes` (
+  `belepes_id` int(11) NOT NULL,
+  `szemely_id` int(11) NOT NULL,
+  `belepes_idopont` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `belepes`
+--
+
+INSERT INTO `belepes` (`belepes_id`, `szemely_id`, `belepes_idopont`) VALUES
+(2, 11, '2025-03-03 11:44:44'),
+(3, 10, '2025-03-03 11:50:57'),
+(4, 10, '2025-03-03 11:59:43'),
+(5, 10, '2025-03-03 12:01:57'),
+(6, 10, '2025-03-03 12:04:56'),
+(7, 5, '2025-03-03 12:31:35');
 
 -- --------------------------------------------------------
 
@@ -252,6 +276,13 @@ INSERT INTO `video` (`video_id`, `video_felh`, `video_link`) VALUES
 --
 
 --
+-- A tábla indexei `belepes`
+--
+ALTER TABLE `belepes`
+  ADD PRIMARY KEY (`belepes_id`),
+  ADD KEY `szemely_id` (`szemely_id`);
+
+--
 -- A tábla indexei `edzes`
 --
 ALTER TABLE `edzes`
@@ -302,6 +333,12 @@ ALTER TABLE `uzenet`
 --
 
 --
+-- AUTO_INCREMENT a táblához `belepes`
+--
+ALTER TABLE `belepes`
+  MODIFY `belepes_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT a táblához `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
@@ -340,6 +377,12 @@ ALTER TABLE `uzenet`
 --
 -- Megkötések a kiírt táblákhoz
 --
+
+--
+-- Megkötések a táblához `belepes`
+--
+ALTER TABLE `belepes`
+  ADD CONSTRAINT `belepes_ibfk_1` FOREIGN KEY (`szemely_id`) REFERENCES `felhasznalok` (`fel_id`);
 
 --
 -- Megkötések a táblához `felhasznalok`
