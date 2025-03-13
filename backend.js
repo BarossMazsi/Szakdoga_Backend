@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 var cors = require('cors')
 
 const app = express()
-const port = 3000
+const port = 5000
 
 app.use(cors())
 app.use(express.json());
@@ -94,6 +94,48 @@ app.get('/EdzesTipusok', (req, res) => {
     connection.end();
   });
 
+app.get('/EdzesCelok', (req, res) => {
+  kapcsolat(); 
+  connection.query('SELECT * FROM cel', (err, rows) => {
+    if (err) {
+      console.error('Hiba történt az célok lekérdezésekor:', err);
+      return res.status(500).send('Hiba történt az célok lekérdezésekor.');
+    }
+    res.status(200).json(rows); 
+    connection.end(); 
+  });
+});
+
+app.get('/DiagrammCelok', (req, res) => {
+  kapcsolat(); 
+  connection.query(`SELECT cel_nev,COUNT(cel.cel_nev) AS Darab
+  FROM felh_adatgyujtes
+  INNER JOIN cel 
+  ON  felh_adatgyujtes.cel_id = cel.cel_id
+  GROUP BY cel.cel_nev;`, (err, rows) => {
+    if (err) {
+      console.error('Hiba történt az célok lekérdezésekor:', err);
+      return res.status(500).send('Hiba történt az célok lekérdezésekor.');
+    }
+    res.status(200).json(rows); 
+    connection.end(); 
+  });
+});
+
+app.get('/DiagrammEdzes', (req, res) => {
+  kapcsolat(); 
+  connection.query(`SELECT tipus_nev,AVG(edzes.edzes_idotartam) AS atlag FROM tipus INNER JOIN edzes ON edzes.edzes_tipus = tipus.tipus_id GROUP BY tipus.tipus_nev;
+  `, (err, rows) => {
+    if (err) {
+      console.error('Hiba történt az célok lekérdezésekor:', err);
+      return res.status(500).send('Hiba történt az célok lekérdezésekor.');
+    }
+    res.status(200).json(rows); 
+    connection.end(); 
+  });
+});
+
+
 
   app.post('/EdzesFelvitel', (req, res) => {
     const datum = new Date();  
@@ -109,6 +151,22 @@ app.get('/EdzesTipusok', (req, res) => {
         return res.status(500).send('Hiba történt az edzés rögzítésekor.');
       }
       res.status(200).send({ message: 'Edzés rögzítve!' });
+    });
+    connection.end();
+  });
+
+  app.post('/FelhasznaloiAdatgyujtes', (req, res) => {
+    // Új edzés adat rögzítése
+    const query = 'INSERT INTO felh_adatgyujtes  VALUES (NULL,?,?,?,?,?,?,?)';
+    const values = [req.body.felh,req.body.bevitel1,req.body.bevitel2,req.body.bevitel3,req.body.bevitel4,req.body.bevitel5,req.body.bevitel6];
+  
+    kapcsolat();
+    connection.query(query, values, (err, result) => {
+      if (err) {
+        console.error('Hiba történt az adatok rögzítésekor:', err);
+        return res.status(500).send('Hiba történt az adatok rögzítésekor.');
+      }
+      res.status(200).send({ message: 'Adatok rögzítve!' });
     });
     connection.end();
   });
@@ -136,6 +194,26 @@ app.get('/EdzesTipusok', (req, res) => {
     });
     connection.end();
   });
+
+//-----------Diagramhoz végpont
+app.get('/EdzesTipusonkentiAtlag', (req, res) => {
+  kapcsolat()
+  connection.query(`
+  SELECT tipus.tipus_nev,AVG(edzes.edzes_idotartam) AS atlag FROM edzes INNER JOIN tipus ON edzes.edzes_tipus = tipus.tipus_id GROUP BY tipus.tipus_nev;   
+    `, (err, rows, fields) => {
+    if (err) {
+      console.log("Hiba")
+      console.log(err)
+      res.status(500).send("Hiba")
+    }
+    else {
+      console.log(rows)
+      res.status(200).send(rows)
+    }
+  })
+  connection.end()
+});
+
 /*
   app.get('/EdzesAtlag', (req, res) => {
     kapcsolat();  // Kapcsolódás az adatbázishoz
