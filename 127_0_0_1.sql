@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 17. 12:49
+-- Létrehozás ideje: 2025. Már 19. 08:45
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -30,6 +30,7 @@ USE `focis_mobil`;
 --
 
 CREATE TABLE `belepes` (
+  `belepes_id` int(11) NOT NULL,
   `szemely_id` int(11) NOT NULL,
   `belepes_idopont` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
@@ -38,16 +39,23 @@ CREATE TABLE `belepes` (
 -- A tábla adatainak kiíratása `belepes`
 --
 
-INSERT INTO `belepes` (`szemely_id`, `belepes_idopont`) VALUES
-(11, '2025-03-03 11:44:44'),
-(10, '2025-03-03 11:50:57'),
-(10, '2025-03-03 11:59:43'),
-(10, '2025-03-03 12:01:57'),
-(10, '2025-03-03 12:04:56'),
-(5, '2025-03-03 12:31:35'),
-(5, '2025-03-17 12:44:36'),
-(5, '2025-03-17 12:45:18'),
-(5, '2025-03-17 12:48:16');
+INSERT INTO `belepes` (`belepes_id`, `szemely_id`, `belepes_idopont`) VALUES
+(1, 11, '2025-03-03 11:44:44'),
+(2, 10, '2025-03-03 11:50:57'),
+(3, 10, '2025-03-03 11:59:43'),
+(4, 10, '2025-03-03 12:01:57'),
+(5, 10, '2025-03-03 12:04:56'),
+(6, 5, '2025-03-03 12:31:35'),
+(7, 5, '2025-03-17 12:44:36'),
+(8, 5, '2025-03-17 12:45:18'),
+(9, 5, '2025-03-17 12:48:16'),
+(10, 5, '2025-03-18 12:30:20'),
+(11, 10, '2025-03-19 07:59:36'),
+(12, 10, '2025-03-19 08:04:30'),
+(13, 10, '2025-03-19 08:09:35'),
+(14, 10, '2025-03-19 08:16:28'),
+(15, 10, '2025-03-19 08:17:18'),
+(16, 5, '2025-03-19 08:33:22');
 
 -- --------------------------------------------------------
 
@@ -366,6 +374,12 @@ INSERT INTO `video` (`video_id`, `video_felh`, `video_link`) VALUES
 --
 
 --
+-- A tábla indexei `belepes`
+--
+ALTER TABLE `belepes`
+  ADD PRIMARY KEY (`belepes_id`);
+
+--
 -- A tábla indexei `cel`
 --
 ALTER TABLE `cel`
@@ -434,6 +448,12 @@ ALTER TABLE `uzenet`
 --
 
 --
+-- AUTO_INCREMENT a táblához `belepes`
+--
+ALTER TABLE `belepes`
+  MODIFY `belepes_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT a táblához `cel`
 --
 ALTER TABLE `cel`
@@ -473,7 +493,7 @@ ALTER TABLE `nemek`
 -- AUTO_INCREMENT a táblához `rang`
 --
 ALTER TABLE `rang`
-  MODIFY `rang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT a táblához `sportolok`
