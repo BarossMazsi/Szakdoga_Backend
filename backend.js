@@ -545,7 +545,7 @@ app.post('/web/login', (req, res) => {
 app.get('/Belepesek', (req, res) => {
   kapcsolat();
   connection.query(`
-  SELECT felh_email, COUNT(belepes_id) AS Belepes
+  SELECT felh_email, COUNT(szemely_id) AS Belepes
   FROM felhasznalok
   INNER JOIN belepes
   ON felhasznalok.fel_id = belepes.szemely_id
