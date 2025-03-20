@@ -195,6 +195,24 @@ app.get('/DiagrammEdzes', (req, res) => {
     connection.end();
   });
 
+  app.post('/EtrendLekerdez', (req, res) => {
+    kapcsolat(); 
+    connection.query(`SELECT cel.cel_nev,  adatgyujtes_felh AS id,  etrend_leiras 
+FROM etrend 
+INNER JOIN cel
+ON etrend.etrend_cel = cel_id
+INNER JOIN felh_adatgyujtes
+ON felh_adatgyujtes.a_cel_id = cel.cel_id Where adatgyujtes_felh = ?`,[req.body.bevitel1] ,(err, rows) => {
+      if (err) {
+        console.error('Hiba történt az étrendek lekérdezésekor:', err);
+        return res.status(500).send('Hiba történt az étrendek lekérdezésekor.');
+      }
+      res.status(200).json(rows); 
+    });
+    connection.end();
+  });
+  
+
 //-----------Diagramhoz végpont
 app.get('/EdzesTipusonkentiAtlag', (req, res) => {
   kapcsolat()
